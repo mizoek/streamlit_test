@@ -8,6 +8,37 @@ from pathlib import Path
 # ページ設定
 st.set_page_config(page_title="レシート帳簿", layout="wide")
 
+st.markdown(
+    """
+    <style>
+    /* 全体の背景 */
+    .stApp {
+        /*
+        background-image: url("assets/bg.png"); 画像を引っ張ってくるときはこう app_ver3.pyと同じ階層のassetsフォルダ直下にあるbg.pngを参照する、の意 
+        background-size: cover; 画面いっぱい 
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: fixed; スクロールしても固定
+        */
+        background-color: #f6f0e6;
+    }
+
+    /* サイドバーの背景 */
+    section[data-testid="stSidebar"] {
+        background-color: #eee6d8;
+    }
+
+    /* カードやコンテナっぽい部分を少し浮かせる */
+    div[data-testid="stMetric"] {
+        background-color: white;
+        padding: 10px;
+        border-radius: 8px;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
 DATA_FILE = Path("data/payments.json")
 
 # --- データ操作 ---
