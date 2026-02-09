@@ -160,5 +160,31 @@ if st.session_state.data_list:
             st.success("データを保存しました！")
             st.rerun()
 
+    st.divider()
+
+    col3, col4 = st.columns([1, 1])
+    with col3:
+        st.subheader("💳 支払い方法の割合")
+        pay_sum = df.groupby("支払い方法")["金額"].sum().reset_index()
+        fig_pie = px.pie(
+            pay_sum, 
+            values="金額", 
+            names="支払い方法", 
+            hole=0.5, # ドーナツの穴
+            color_discrete_sequence=px.colors.qualitative.Pastel
+        )
+        fig_pie.update_layout(paper_bgcolor='rgba(0,0,0,0)')
+        st.plotly_chart(fig_pie, use_container_width=True)
+
+    with col4:
+    # ここは将来のために空けておくか、簡単な統計を出す
+        st.subheader("💡 今月のプチ分析")
+        most_used_pay = pay_sum.loc[pay_sum['金額'].idxmax(), '支払い方法'] if not pay_sum.empty else "なし"
+        st.info(f"今月最も使っている支払い方法は **{most_used_pay}** です。")
+    
+    # おまけ：総額を大きく出すなど
+        st.metric("今月の平均日給（仮）", f"{int(df['金額'].sum() / 30):,} 円/日")
+
+
 else:
     st.info("サイドバーからデータを入力してください。")
