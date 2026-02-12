@@ -1,3 +1,15 @@
 streamlit
 pandas
 plotly
+
+altair
+pydeck
+watchdog
+tornado
+protobuf
+click
+requests
+pillow
+validators
+toml
+gitpython
