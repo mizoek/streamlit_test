@@ -53,6 +53,9 @@ def load_data():
         return {"records": []}
     with open(DATA_FILE, "r", encoding="utf-8") as f:
         return json.load(f)
+    if isinstance(data, list):
+        data = {"records": data}
+    return data
 
 def save_data(data):
     DATA_FILE.parent.mkdir(exist_ok=True)
@@ -61,7 +64,7 @@ def save_data(data):
 
 # --- データの読み込み ---
 if "data_list" not in st.session_state:
-    st.session_state.data_list = load_data().get("records", [])
+    st.session_state.data_list = load_data()
 
 # --- 1. サイドバー：入力エリア & 月間フィルター ---
 with st.sidebar:
