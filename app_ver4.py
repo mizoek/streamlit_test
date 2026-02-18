@@ -50,11 +50,11 @@ if not DATA_FILE.exists():
 # --- データ操作 ---
 def load_data():
     if not DATA_FILE.exists():
-        return {"records": []}
+        return []
     with open(DATA_FILE, "r", encoding="utf-8") as f:
         return json.load(f)
     if isinstance(data, list):
-        data = {"records": data}
+        return data.get("records", [])
     return data
 
 def save_data(data):
