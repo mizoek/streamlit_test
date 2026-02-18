@@ -52,7 +52,8 @@ def load_data():
     if not DATA_FILE.exists():
         return []
     with open(DATA_FILE, "r", encoding="utf-8") as f:
-        return json.load(f)
+        data = json.load(f)
+    
     if isinstance(data, list):
         return data.get("records", [])
     return data
