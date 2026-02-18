@@ -42,26 +42,31 @@ st.markdown(
 # --- データ保存用ファイルの配置 ---
 BASE_DIR = Path(__file__).parent
 DATA_FILE = BASE_DIR / "data.json"
+st.write("DATA_FILE:", DATA_FILE.resolve())
 
 # --- データ保存用ファイルdata.jsonの新規作成 ---
-if not DATA_FILE.exists():
-    DATA_FILE.write_text("[]", encoding="utf-8")
-
-# --- データ操作 ---
 def load_data():
     if not DATA_FILE.exists():
         return []
+
     with open(DATA_FILE, "r", encoding="utf-8") as f:
         data = json.load(f)
-    
-    if isinstance(data, list):
-        return data.get("records", [])
-    return data
 
-def save_data(data):
+    # {"records": [...]} の形式
+    if isinstance(data, dict):
+        return data.get("records", [])
+
+    # [...] の形式（過去データ救済用）
+    if isinstance(data, list):
+        return data
+
+    return []
+
+
+def save_data(records):
     DATA_FILE.parent.mkdir(exist_ok=True)
     with open(DATA_FILE, "w", encoding="utf-8") as f:
-        json.dump(data, f, ensure_ascii=False, indent=2)
+        json.dump({"records": records}, f, ensure_ascii=False, indent=2)
 
 # --- データの読み込み ---
 if "data_list" not in st.session_state:
@@ -96,7 +101,8 @@ with st.sidebar:
             "金額": int(price)
         }
         st.session_state.data_list.append(new_data)
-        save_data({"records": st.session_state.data_list})
+        save_data(st.session_state.data_list)
+
         st.toast(f"「{shop_name}」を記録しました！", icon="✅")
         st.rerun() # グラフに即時反映させるため
 
@@ -168,7 +174,7 @@ if st.session_state.data_list:
             others = df_all[df_all["年月"] != selected_month][["日付", "店名", "支払い方法", "金額"]]
             final_df = pd.concat([others, edited_df], ignore_index=True)
             st.session_state.data_list = final_df.to_dict("records")
-            save_data({"records": st.session_state.data_list})
+            save_data(st.session_state.data_list)
             st.success("データを保存しました！")
             st.rerun()
 
