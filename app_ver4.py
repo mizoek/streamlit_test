@@ -105,6 +105,8 @@ with st.sidebar:
     st.subheader("🔍 表示設定")
     if st.session_state.data_list:
         temp_df = pd.DataFrame(st.session_state.data_list)
+        st.write("デバッグ用 読み込んだ列:", temp_df.columns.tolist())
+        st.write(temp_df.head())
         temp_df["年月"] = pd.to_datetime(temp_df["日付"]).dt.strftime('%Y-%m')
         month_list = sorted(temp_df["年月"].unique(), reverse=True)
         selected_month = st.selectbox("表示月を選択", month_list)
